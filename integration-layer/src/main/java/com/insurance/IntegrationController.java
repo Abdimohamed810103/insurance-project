@@ -24,14 +24,14 @@ public class IntegrationController {
         this.subject = subject;
         this.fagsystemStatusObserver = fagsystemStatusObserver;
 
-        // Register the observer for Fagsystemet failure
+        // Register the observer for Fagsystemet status
         this.subject.registerObserver(fagsystemStatusObserver);
     }
 
     @PostMapping("/process")
     public ResponseEntity<String> process(@RequestBody String customerName) {
         try {
-            String result = integrationService.processAgreement("abdi Mohamed");
+            String result = integrationService.processAgreement(customerName);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

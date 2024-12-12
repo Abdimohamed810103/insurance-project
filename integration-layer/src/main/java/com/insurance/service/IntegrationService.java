@@ -41,40 +41,40 @@ public class IntegrationService {
             return generateSuccessResponse(agreement.customerId(), updatedAgreement.status().name());
 
         } catch (Exception e) {
-            notifyObservers("Error in process: " + e.getMessage());
+            notify("Error in process: " + e.getMessage());
             throw new RuntimeException("Error in process: " + e.getMessage(), e);
         }
     }
 
     private Customer createCustomer(String customerName) {
         Customer customer = customerService.createCustomer(customerName);
-        notifyObservers("Customer created: " + customer);
+        notify("Customer created: " + customer);
         return customer;
     }
 
     private Agreement createAgreement(String customerId) {
         Agreement agreement = agreementService.createAgreement(customerId);
-        notifyObservers("Agreement created: " + agreement);
+        notify("Agreement created: " + agreement);
         return agreement;
     }
 
     private String sendAgreement(String agreementId) {
         String mailStatus = mailService.sendAgreement(agreementId);
-        notifyObservers("Mail Service returned status: " + mailStatus);
+        notify("Mail Service returned status: " + mailStatus);
         return mailStatus;
     }
 
     private void handleFailedMailService(Agreement agreement) {
-        notifyObservers("Error: Mail Service failed to send the agreement for ID: " + agreement.id());
+        notify("Error: Mail Service failed to send the agreement for ID: " + agreement.id());
     }
 
     private Agreement updateAgreementStatus(String agreementId) {
         try {
             Agreement updatedAgreement = agreementService.updateAgreementStatus(agreementId);
-            notifyObservers("Agreement status updated: " + updatedAgreement);
+            notify("Agreement status updated: " + updatedAgreement);
             return updatedAgreement;
         } catch (Exception e) {
-            notifyObservers("Fagsystemet status update failed for agreement: " + agreementId);
+            notify("Fagsystemet status update failed for agreement: " + agreementId);
             throw new RuntimeException("Fagsystemet status update failed.", e);
         }
     }
@@ -89,7 +89,7 @@ public class IntegrationService {
                 ", Agreement Status: " + status;
     }
 
-    private void notifyObservers(String message) {
+    private void notify(String message) {
         subject.notifyObservers(message);
     }
 }
